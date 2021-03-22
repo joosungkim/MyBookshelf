@@ -16,7 +16,7 @@ class NetworkManager {
     private let cache = NSCache<NSString, UIImage>()
     
     //MARK: Network Logic
-    func getSearchResult(for keyWord: String, completionHandler: @escaping (SearchResult) -> Void) {
+    func getSearchResult(for keyWord: String, completionHandler: @escaping (Result<SearchResult, BookshelfError>) -> Void) {
         let endpoint = baseURL + "/search/\(keyWord)"
         guard let url = URL(string: endpoint) else { return }
         
@@ -42,8 +42,8 @@ class NetworkManager {
             }
             
             do {
-                let user = try JSONDecoder().decode(GFUser.self, from: data)
-                completionHandler(.success(user))
+                let result = try JSONDecoder().decode(SearchResult.self, from: data)
+                completionHandler(.success(result))
             } catch {
                 completionHandler(.failure(.decodeError))
             }
