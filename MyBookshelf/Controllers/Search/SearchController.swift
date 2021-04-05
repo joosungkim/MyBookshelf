@@ -7,10 +7,7 @@
 
 import UIKit
 
-class SearchController: UIViewController {
-    //MARK: Helpers
-    let networkManager = NetworkManager.shared
-    
+class SearchController: UIViewController {    
     //MARK: View Components
     var searchController: UISearchController?
     var searchResultTable: UITableView!
@@ -20,18 +17,31 @@ class SearchController: UIViewController {
     var searchText: String?
     var searchResults: [Book?] = []
     var currentPage = 1
+    var total = 0
     var searchHistory: [Book] = []
     
     //MARK: View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Search Book"
+        getHistory()
         setUpTableView()
         layoutUI()
         setUpSearchBar()
     }
 
     //MARK: Setup and layout logic
+    func getHistory() {
+        HistoryManager.shared.getHistory { [weak self] result in
+            switch result {
+            case.success(let history):
+                self?.searchHistory = history
+            case .failure(let error):
+                print("error: \(error)")
+            }
+        }
+    }
+    
     private func setUpSearchBar() {
         self.searchController = UISearchController(searchResultsController: nil)
         self.searchResultTable.tableHeaderView = searchController?.searchBar

@@ -9,17 +9,18 @@ import UIKit
 
 class SearchResultTableViewCell: UITableViewCell {
     //MARK: UI Components
-    let bookThumbnail: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        return l
+    let bookThumbnail: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.image = UIImage(imageLiteralResourceName: "error")
+        return iv
     }()
     
     let titleLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.adjustsFontSizeToFitWidth = true
-        l.minimumScaleFactor = 0.7
+        l.minimumScaleFactor = 0.5
         return l
     }()
     
@@ -27,7 +28,7 @@ class SearchResultTableViewCell: UITableViewCell {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.adjustsFontSizeToFitWidth = false
-        l.minimumScaleFactor = 0.5
+        l.minimumScaleFactor = 0.7
         return l
     }()
     
@@ -43,8 +44,9 @@ class SearchResultTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        self.bookThumbnail.text = ""
-        self.imageView!.image = nil
+        self.titleLabel.text = ""
+        self.subtitleLabel.text = ""
+        self.bookThumbnail.image = UIImage(imageLiteralResourceName: "error")
     }
     
     func set(book: Book) {
@@ -52,11 +54,6 @@ class SearchResultTableViewCell: UITableViewCell {
         subtitleLabel.text = book.subtitle
         if book.image != "" {
             getImage(imageUrl: book.image)
-        } else {
-            DispatchQueue.main.async {
-                self.imageView?.image = UIImage(imageLiteralResourceName: "error")
-                self.imageView?.reloadInputViews()
-            }
         }
     }
     
@@ -64,19 +61,15 @@ class SearchResultTableViewCell: UITableViewCell {
         NetworkManager.shared.getImage(urlString: imageUrl) { [weak self] result in
             switch result {
             case.failure(let error):
-                DispatchQueue.main.async {
-                    self?.imageView?.image = UIImage(imageLiteralResourceName: "error")
-                    self?.imageView?.reloadInputViews()
-                }
+                print("Image error: \(error)")
             case .success(let image):
                 DispatchQueue.main.async {
-                    self?.imageView?.image = image
-                    self?.imageView?.reloadInputViews()
+                    self?.bookThumbnail.image = image
+                    self?.bookThumbnail.reloadInputViews()
                 }
             }
         }
-    }
-    
+    }    
     
     //MARK: Config and layout logic
     private func layoutUI() {

@@ -19,14 +19,14 @@ extension SearchController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as!  SearchResultTableViewCell
         if searchController!.isActive, searchController!.searchBar.text != ""{
-            if searchResults.count != 0 {
+            if searchResults.count > 0 {
                 cell.set(book: searchResults[indexPath.row]!)
             } else { // no results
                 cell.set(book: .init(title: "No Search Result", subtitle: "", isbn13: "", price: "", image: "", url: ""))
             }
         } else { //show history
             if searchHistory.count != 0 {
-                print("here2")
+                cell.set(book: searchHistory[indexPath.row])
             } else { //no history
                 cell.set(book: .init(title: "No Search History", subtitle: "", isbn13: "", price: "", image: "", url: ""))
             }
@@ -35,18 +35,19 @@ extension SearchController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //add to history
-        //open detailed controller
-        if searchController!.isActive, searchController!.searchBar.text != ""{
-            if searchResults.count != 0 {
-                
+        if searchController!.isActive, searchController!.searchBar.text != "", searchResults.count  != 0 {
+            let detailController = DetailController()
+            let selectedBook = searchResults[indexPath.row]!
+            detailController.setDetailByBook(book: selectedBook)
+            self.navigationController?.pushViewController(detailController, animated: true)
+            HistoryManager.shared.addHistory(book: selectedBook) { (error) in
+                print("error: \(error)")
             }
-        } else {
-            if searchHistory.count != 0 { //To history
-                print("here2")
-            }
+        } else if searchHistory.count != 0 {
+            let detailController = DetailController()
+            detailController.setDetailByBook(book: searchHistory[indexPath.row])
+            self.navigationController?.pushViewController(detailController, animated: true)
         }
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

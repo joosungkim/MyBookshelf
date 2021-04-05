@@ -52,9 +52,14 @@ class NetworkManager {
     }
     
     func getImage(urlString: String, completionHandler: @escaping (Result<UIImage, BookshelfError>) -> Void) {
+        if let image = cache.object(forKey: NSString(string: urlString)) {
+            completionHandler(.success(image))
+            return
+        }
+        
         guard let url = URL(string: urlString) else { return }
         
-        session.dataTask(with: url) { (data, response, error) in
+        session.dataTask(with: url) {[weak self] (data, response, error) in
             guard error == nil else {
                 completionHandler(.failure(.clientError))
                 return
@@ -75,8 +80,42 @@ class NetworkManager {
                 return
             }
             
-//            self?.cache.setObject(image, forKey: NSString(string: urlString))
+            self?.cache.setObject(image, forKey: NSString(string: urlString))
             completionHandler(.success(image))
+        }.resume()
+    }
+    
+    func getDetail(isbn: String, completionHandler: @escaping (Result<BookDetail, BookshelfError>) -> Void) {
+        let endpoint = baseURL + "/books/\(isbn)"
+        guard let url = URL(string: endpoint) else { return }
+        
+        session.dataTask(with: url) { (data, response, error) in
+            guard error == nil else {
+                completionHandler(.failure(.clientError))
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else {
+                completionHandler(.failure(.serverError))
+                return
+            }
+            
+            guard response.mimeType == ResponseMIMEType.applicationJSON.rawValue else {
+                completionHandler(.failure(.MIMEError))
+                return
+            }
+            
+            guard let data = data else {
+                completionHandler(.failure(.dataError))
+                return
+            }
+            
+            do {
+                let result = try JSONDecoder().decode(BookDetail.self, from: data)                
+                completionHandler(.success(result))
+            } catch {
+                completionHandler(.failure(.decodeError))
+            }
         }.resume()
     }
 }

@@ -20,12 +20,12 @@ extension SearchController: UISearchResultsUpdating {
     
     
     private func updateResultsForSearch(_ text: String) {
-        networkManager.getSearchResult(for: text, page: currentPage) { [weak self] result in
+        NetworkManager.shared.getSearchResult(for: text, page: currentPage) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let result):
                 self.searchResults = result.books
-                print("result: \(result.books)")
+                self.total = Int(result.total)!
                 DispatchQueue.main.async {
                     self.searchResultTable.reloadData()
                 }
@@ -35,13 +35,38 @@ extension SearchController: UISearchResultsUpdating {
         }
     }
     
-    @objc func pullDownToGetMorePages() {
-        //increment page
-        currentPage += 1
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard total > (currentPage + 1) * 10 else { return }
         
+        let contentHeight = scrollView.contentSize.height
+        let contentOffset = scrollView.contentOffset.y
+        let scrollViewFrameHeight = scrollView.frame.size.height
+        
+        if (scrollViewFrameHeight + contentOffset) > (contentHeight - 200)  {
+            if let text = searchController?.searchBar.text {
+                NetworkManager.shared.getSearchResult(for: text, page: currentPage + 1) { [weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(let result):
+                        self.searchResults.append(contentsOf: result.books)
+                        if let page = result.page {
+                            self.currentPage = Int(page)!
+                        }
+                        DispatchQueue.main.async {
+                            self.searchResultTable.reloadData()
+                        }
+                    case .failure(let error):
+                        print("failed: \(error)")
+                    }
+                }
+            }
+        }
     }
-    
+
     private func updateResultsToHistory() {
-        print("history")
+        self.getHistory()
+        DispatchQueue.main.async {
+            self.searchResultTable.reloadData()
+        }
     }
 }
