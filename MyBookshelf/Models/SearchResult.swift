@@ -7,30 +7,41 @@
 
 import Foundation
 
+// MARK: - Welcome
 struct SearchResult: Codable {
-    let title: String
-    let subtitle: String
-    let isbn13: String
-    let price: String
-    let image: String
-    let url: String
+    let error, total: String
+    let page: String?
+    var books: [Book]
     
-    enum CodingKeys: String, CodingKey {
-        case title
-        case subtitle
-        case isbn13
-        case price
-        case image
-        case url 
+    enum Keys: String, CodingKey {
+        case error
+        case total
+        case page
+        case books
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: Keys.self)
+        error = try! container.decode(String.self, forKey: .error)
+        total = try! container.decode(String.self, forKey: .total)
+        page = try? container.decode(String.self, forKey: .page)
+        books =  (try? container.decode([Book].self, forKey: . books)) ?? []
     }
 }
 
-extension SearchResult: Hashable {
+// MARK: - Book
+struct Book: Codable {
+    let title, subtitle, isbn13, price: String
+    let image: String
+    let url: String
+}
+
+extension Book: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(isbn13)
     }
     
-    static func ==(lhs: SearchResult, rhs: SearchResult) -> Bool {
-        return lhs.isbn13 == rhs.isbn13
+    static func == (lhs: Book, rhs: Book) -> Bool {
+        return lhs.isbn13 == rhs.isbn13 
     }
 }

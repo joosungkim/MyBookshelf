@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F9392A7C2619E655009A5C29 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9392A7B2619E655009A5C29 /* ImageCache.swift */; };
+		F9392A812619E881009A5C29 /* UIViewController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9392A802619E881009A5C29 /* UIViewController + Extension.swift */; };
 		F946B4CB2607303300732F8A /* SearchController + Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = F946B4CA2607303300732F8A /* SearchController + Search.swift */; };
 		F946B4D02607321200732F8A /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F946B4CF2607321200732F8A /* SearchResultTableViewCell.swift */; };
 		F946B4D62607324900732F8A /* SearchController + TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F946B4D52607324900732F8A /* SearchController + TableView.swift */; };
@@ -41,6 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F9392A7B2619E655009A5C29 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		F9392A802619E881009A5C29 /* UIViewController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extension.swift"; sourceTree = "<group>"; };
 		F946B4CA2607303300732F8A /* SearchController + Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchController + Search.swift"; sourceTree = "<group>"; };
 		F946B4CF2607321200732F8A /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		F946B4D52607324900732F8A /* SearchController + TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchController + TableView.swift"; sourceTree = "<group>"; };
@@ -88,6 +92,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F9392AA3261A3A55009A5C29 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		F946B4D42607323A00732F8A /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +128,8 @@
 			isa = PBXGroup;
 			children = (
 				F9604674260850B500217B60 /* ErrorMessage.swift */,
+				F9392A7B2619E655009A5C29 /* ImageCache.swift */,
+				F9392A802619E881009A5C29 /* UIViewController + Extension.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -144,6 +157,7 @@
 		F969004425FF385F009D21F7 /* MyBookshelf */ = {
 			isa = PBXGroup;
 			children = (
+				F969005325FF3860009D21F7 /* Info.plist */,
 				F946B4E42607C16C00732F8A /* Utilities */,
 				F946B4DE2607C06A00732F8A /* Managers */,
 				F9715839260384DE00B6B51C /* Models */,
@@ -185,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				F946B4CF2607321200732F8A /* SearchResultTableViewCell.swift */,
+				F9392AA3261A3A55009A5C29 /* Cells */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -205,7 +220,6 @@
 				F969004E25FF3860009D21F7 /* Assets.xcassets */,
 				F969004525FF385F009D21F7 /* AppDelegate.swift */,
 				F969005025FF3860009D21F7 /* LaunchScreen.storyboard */,
-				F969005325FF3860009D21F7 /* Info.plist */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -339,6 +353,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9392A7C2619E655009A5C29 /* ImageCache.swift in Sources */,
 				F971585D2603C1A800B6B51C /* HistoryController.swift in Sources */,
 				F960467A260850E600217B60 /* SearchResult.swift in Sources */,
 				F946B4D62607324900732F8A /* SearchController + TableView.swift in Sources */,
@@ -348,6 +363,7 @@
 				F946B4CB2607303300732F8A /* SearchController + Search.swift in Sources */,
 				F971584D26038F5F00B6B51C /* SearchController.swift in Sources */,
 				F969004625FF385F009D21F7 /* AppDelegate.swift in Sources */,
+				F9392A812619E881009A5C29 /* UIViewController + Extension.swift in Sources */,
 				F960467F2608518800217B60 /* BookDetail.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

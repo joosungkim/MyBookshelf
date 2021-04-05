@@ -17,16 +17,16 @@ struct BookDetail: Codable {
     let rating: String
     let desc: String
     let pdf: [String]
-    let searchResult: SearchResult
+    let book: Book
     
 }
 
-extension BookDetail: Hashable {
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(searchResult)
-    }
-    
-    static func ==(lhs: BookDetail, rhs: BookDetail) -> Bool {
-        return lhs.searchResult.isbn13 == rhs.searchResult.isbn13
-    }
-}
+//extension BookDetail: Hashable {
+//    func hash(into hasher: inout Hasher) {
+//        hasher.combine(searchResult)
+//    }
+//    
+//    static func ==(lhs: BookDetail, rhs: BookDetail) -> Bool {
+//        return lhs.searchResult.isbn13 == rhs.searchResult.isbn13
+//    }
+//}
